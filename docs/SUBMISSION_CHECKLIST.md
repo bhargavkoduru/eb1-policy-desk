@@ -28,7 +28,7 @@ The handouts permit a custom use case. This project follows their RAG and agent 
 
 1. Try one cited answer and one checklist yourself. Inspect the evidence and the recorded limitations.
 2. Paste each week's submission draft and evaluation report into a Google Doc. Add your name, repository link and video link.
-3. Upload only the inspected ZIP contents to your GitHub repository. Your local `.env`, PDF, sessions and `.venv` must stay out.
+3. Use https://github.com/bhargavkoduru/eb1-policy-desk for the code link. It is private, so grant examiner access. Credentials, demo scripts, source PDFs, sessions and `.venv` are excluded; future uploads should also use the inspected allowlist.
 4. Record a separate live walkthrough of each milestone, no longer than five minutes.
 5. Complete the course submission form with the requested links. This agent has not submitted anything for you.
 

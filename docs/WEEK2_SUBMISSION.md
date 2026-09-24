@@ -30,6 +30,6 @@ See `docs/WEEK2_EVALUATION.md` and `evals/` for actual measurements. This small 
 
 ## Submission links to add
 
-- GitHub repository: add after uploading the inspected submission ZIP contents.
+- GitHub repository: https://github.com/bhargavkoduru/eb1-policy-desk (currently private; grant the examiner access).
 - Live demo video, at most five minutes: add after recording.
 - Google Doc: paste this document and the evaluation report into your own Google Doc.

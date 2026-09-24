@@ -1,6 +1,6 @@
 # Examiner demo deployment
 
-This version is ready for Streamlit Community Cloud. It serves both Week 2 and Week 3 modes from `app.py`. The public USCIS corpus and its precomputed index are included; cloud startup makes no parsing or embedding calls.
+This version is ready for Streamlit Community Cloud. It serves both Week 2 and Week 3 modes from `app.py`. The public USCIS corpus and its precomputed index are included; cloud startup makes no parsing or embedding calls. Code is published at https://github.com/bhargavkoduru/eb1-policy-desk as a private repository; the hosted app still requires the account steps below.
 
 ## Final account steps
 
@@ -36,6 +36,6 @@ The owner of the server can access its data. Viewer isolation is not encryption 
 
 In PowerShell, set `$env:EB1_HOSTED='false'` and run Streamlit with `--server.address 127.0.0.1`, or use `start.ps1`. Local mode refuses to start on a non-loopback bind address.
 
-Run `python -m pytest -q tests`. The hosting tests cover password verification, missing configuration, real login/logout form interactions, cross-viewer workspace isolation, atomic quotas, login limits, credential-free index startup and identity propagation into LangGraph tools. They use fake credentials and do not call Nebius.
+Run `python -m pytest -q tests`. All 28 tests passed locally on Windows and in [GitHub's Ubuntu/Python 3.12 validation](https://github.com/bhargavkoduru/eb1-policy-desk/actions/runs/35950905318). The hosting tests cover password verification, missing configuration, real login/logout form interactions, cross-viewer workspace isolation, atomic quotas, login limits, credential-free index startup and identity propagation into LangGraph tools. They use fake credentials and do not call Nebius.
 
 Sources: [Streamlit deployment](https://docs.streamlit.io/deploy/streamlit-community-cloud/deploy-your-app/deploy), [secret management](https://docs.streamlit.io/deploy/streamlit-community-cloud/deploy-your-app/secrets-management), [local storage limitations](https://docs.streamlit.io/develop/concepts/connections/connecting-to-data).

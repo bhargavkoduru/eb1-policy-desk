@@ -36,6 +36,6 @@ Approval belongs in code, not only in the prompt. A durable checkpoint is necess
 
 ## Submission links to add
 
-- GitHub repository and Week 3 milestone: add after uploading.
+- GitHub repository: https://github.com/bhargavkoduru/eb1-policy-desk (currently private; Week 3 is the Research checklist mode in the shared app).
 - Live demo video, at most five minutes: add after recording.
 - Google Doc: paste this document and the Week 3 evaluation report into your own Google Doc.
