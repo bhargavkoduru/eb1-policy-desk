@@ -2,17 +2,17 @@
 
 ## One-liner
 
-My agent helps applicants turn an EB-1 policy research question into a cited, reviewed checklist in a local web app, replacing manual searching and note-taking. It selects among four tools, hands off when information is missing or unsupported and before a final save, and targets completion within two minutes with successful handling of five workflow scenarios. The manual time baseline remains to be measured.
+My agent helps applicants turn an EB-1 policy research question into a cited, reviewed checklist in a Streamlit web app, replacing manual searching and note-taking. It selects among four tools, hands off when information is missing or unsupported and before a final save, and targets completion within two minutes with successful handling of five workflow scenarios. The manual time baseline remains to be measured.
 
 ## Agent framework
 
 | Field | Implementation |
 | --- | --- |
 | Goal | Research a policy question and prepare a checklist that the user can inspect, edit and approve. |
-| Surface | Streamlit, Week 3 mode, running on the user's computer. |
+| Surface | Streamlit, Week 3 mode; public hosted demo or local use. |
 | Steps | Choose whether to clarify, load, search again, draft or hand off; pause for review; save after approval. |
 | Tools | `search_policy` and `load_research_session` read; `draft_checklist` prepares a draft; `save_approved_checklist` writes a final approved record. |
-| Memory | Goal, category, clarification history, evidence, tool trace, draft and review state persist in local SQLite checkpoints across restarts. |
+| Memory | Goal, category, history, evidence, trace, draft and review state use SQLite checkpoints. Local mode recovers across restarts; the anonymous hosted demo exposes only the current browser workspace. |
 | Limits | No personal eligibility decision, approval probability, invented candidate facts, LinkedIn scraping, email sending or automatic final save. |
 | Human review | Approve displayed draft, edit suggested tasks/notes and review again, or cancel. Editing clears approval. |
 | Recovery | One client retry for transient API failures; bounded planning/search; empty evidence hands off. Save retries once, retains failed state, and supports an idempotent retry. |
@@ -30,12 +30,19 @@ Codex generated and revised original code from the user's requested scope. Testi
 
 ## Evaluation and learnings
 
-The local suite passed 19 tests, including Streamlit form interactions. Live checks covered a judged-evidence checklist with simulated review, ambiguity/cancellation and unsupported requests. Error/retry scenarios use controlled injected failures. See `docs/WEEK3_EVALUATION.md` and `evals/week3_live.json`.
+The current local suite passed 28 tests, including Streamlit form interactions, password-free hosted access, workspace isolation and usage limits. Live checks covered a judged-evidence checklist with simulated review, ambiguity/cancellation and unsupported requests. Error/retry scenarios use controlled injected failures. See `docs/WEEK3_EVALUATION.md` and `evals/week3_live.json`.
 
 Approval belongs in code, not only in the prompt. A durable checkpoint is necessary to resume an unfinished review. A successful save is not sufficient evidence of a useful checklist: topic focus and claim support must also be checked. No measured human time saving is claimed until the manual baseline is recorded.
 
+## Examiner access
+
+Use the shared public app URL and select **Week 3 - Research checklist** in the sidebar. No password, account or API key is required from the examiner. Hosted work stays available during the current browser session; download approved checklists before refreshing or closing the page. The owner configures the API key on the server.
+
+The hosted URL is still pending deployment. The app can also be run locally using the README instructions.
+
 ## Submission links to add
 
-- GitHub repository: https://github.com/bhargavkoduru/eb1-policy-desk (currently private; Week 3 is the Research checklist mode in the shared app).
+- GitHub repository: https://github.com/bhargavkoduru/eb1-policy-desk (public; Week 3 is the Research checklist mode in the shared app).
+- Hosted app URL: add the actual deployed URL (optional extra alongside the required deliverables).
 - Live demo video, at most five minutes: add after recording.
 - Google Doc: paste this document and the Week 3 evaluation report into your own Google Doc.

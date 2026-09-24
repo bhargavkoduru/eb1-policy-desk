@@ -28,7 +28,7 @@ The Week 2 and Week 3 modes are independently accessible in the sidebar. Week 3 
 
 | Data | Location and handling |
 | --- | --- |
-| API keys | Local `.env`, loaded server-side; excluded from Git and the submission ZIP. |
+| API keys | Local `.env` or hosted Streamlit secrets, loaded server-side; excluded from Git and the submission ZIP. |
 | Source PDFs | Local project folder; selected public pages were sent to LlamaCloud for parsing. Raw PDFs and cloud responses are excluded from the ZIP. |
 | Public prepared chapters | `data/corpus/` locally; a reproducible public-only copy is included under `corpus/` in the submission. |
 | Embeddings and chunks | `data/index/` on the server; a checked public-only copy in `corpus/index/` makes cloud startup independent of embedding calls. No Pinecone index is needed. |
@@ -37,7 +37,7 @@ The Week 2 and Week 3 modes are independently accessible in the sidebar. Week 3 
 | Approved checklists | Local `runtime/research.sqlite`; final save requires review. |
 | Evaluation samples | Public policy questions only, under `evals/`. |
 
-Local mode must bind to `127.0.0.1`. Hosted mode requires a viewer login, with separate SQLite files under `runtime/viewers/<account hash>/` and daily request allowances. Local files are not additionally encrypted by the app. Community Cloud does not guarantee persistence of those files across platform rebuilds; download important checklists. See `CLOUD_DEPLOYMENT.md` for access controls, limits and deployment steps.
+Local mode must bind to `127.0.0.1`. Hosted mode needs no login. Each browser session receives a server-generated random identity and separate SQLite files under `runtime/visitors/<random identity>/`, with session and global daily request allowances. The research service stays in that browser's session state; only the public retriever is shared. URL parameters cannot select another workspace. Local files are not additionally encrypted by the app. Hosted workspace access ends when the browser session resets, including a page refresh. Server files may remain until a platform rebuild removes them; this is not automatic deletion. Download important checklists. Local mode retains its stable workspace across restarts. See `CLOUD_DEPLOYMENT.md` for access controls, limits and deployment steps.
 
 ## Decisions and limits
 

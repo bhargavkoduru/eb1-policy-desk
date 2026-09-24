@@ -1,41 +1,37 @@
-# Examiner demo deployment
+# Public examiner demo deployment
 
-This version is ready for Streamlit Community Cloud. It serves both Week 2 and Week 3 modes from `app.py`. The public USCIS corpus and its precomputed index are included; cloud startup makes no parsing or embedding calls. Code is published at https://github.com/bhargavkoduru/eb1-policy-desk as a private repository; the hosted app still requires the account steps below.
+One Streamlit app serves both Week 2 Policy Q&A and Week 3 Research checklist. It opens without a password. Code is at https://github.com/bhargavkoduru/eb1-policy-desk; the hosted URL is still pending the owner's deployment steps below.
 
-## Final account steps
+## Owner setup, once
 
-1. Sign in to [Streamlit Community Cloud](https://share.streamlit.io/) with your GitHub account. Authorize access to the project repository if requested.
-2. Choose **Create app**, select repository `bhargavkoduru/eb1-policy-desk`, branch `main`, entrypoint **`app.py`**, and Python **3.12** under Advanced settings.
-3. In Advanced settings → Secrets, paste the contents of the local file `runtime/deployment/streamlit.secrets.toml`. Do not upload this file to GitHub or put it in a Google Doc. It contains the Nebius key and hashed viewer access codes.
-4. Click **Deploy**. Verify that the first screen requires sign-in and that a cited answer works after login. Copy the URL Streamlit actually assigns; an example URL is not evidence of a successful deployment.
+1. Sign in to [Streamlit Community Cloud](https://share.streamlit.io/) with your GitHub account.
+2. Choose **Create app**, repository `bhargavkoduru/eb1-policy-desk`, branch `main`, entrypoint **`app.py`**, and Python **3.12** in Advanced settings.
+3. In Advanced settings > Secrets, paste the contents of the local file `runtime/deployment/streamlit.secrets.toml`. This contains the owner's Nebius key and usage settings. Keep it out of GitHub and Google Docs. No viewer credentials are needed. For a fresh checkout, add your own key to `.env` and run `python -m scripts.prepare_cloud_secrets` first.
+4. Click **Deploy**. In Sharing settings, make the app **public** so anyone with its URL can view it. If updating an earlier deployment, replace the old secrets with the regenerated file and remove the obsolete `[viewers]` section.
+5. Open the actual assigned URL in a private/incognito browser window. It should open directly to the app, without a sign-in screen. Check one cited answer and one reviewed checklist save/download. The examiner needs neither your Streamlit account nor an API key.
+6. Add that same URL to the README and both week's submission drafts. Each submission identifies its own sidebar mode. Do not use the local `127.0.0.1` address as the examiner link.
 
-The owner and examiner usernames/codes are in the local **`runtime/deployment/VIEWER_ACCESS.txt`**. Provide only the examiner login through your private submission channel. Anyone sharing one username shares that username's workspace; create a separate viewer account for each person who needs isolated history.
+These steps require the owner's Streamlit browser sign-in. GitHub CLI authentication does not automatically create a Streamlit deployment. `VIEWER_ACCESS.txt` is obsolete as a credential file and now explains that no examiner login is needed.
 
-If Streamlit also restricts the app to invited viewers, add the examiner in its Sharing settings. A private GitHub repository also requires examiner repository access for code review. App-level login remains required even when Streamlit's sharing setting is public.
+## Examiner experience
 
-These last account steps require your Streamlit sign-in. GitHub authentication in the development environment does not automatically sign in to Streamlit Community Cloud.
+Open the link, select the relevant week, and use the app. Week 2 displays cited answers and supporting passages. Week 3 researches a question, pauses for human review, allows edits or cancellation, and saves a final checklist only after approval. Download the approved checklist before refreshing or closing the page.
 
-## What changed for hosting
+Each browser session receives a random server-generated workspace. It cannot select another workspace through a URL parameter. The public retriever is shared; the research agent and its SQLite directory are separate per browser session. Questions and excerpts go to Nebius. There are no candidate uploads in this version.
 
-- The app defaults to hosted mode and stops before corpus/model access if viewer credentials are missing.
-- Access codes are randomly generated, stored as PBKDF2-SHA256 hashes in cloud secrets, and compared on the server. Eight attempts per username and 100 globally are allowed in a rolling ten-minute period.
-- Each authenticated username maps to a separate SQLite directory. A viewer cannot list or open another account's research sessions by changing a session ID. Sign-out clears the browser session state; credential changes revoke existing app sessions on their next rerun.
-- Public retrieval resources are shared; private research services are cached separately by viewer identity.
-- Only one live model operation runs at a time. Defaults are 30 actions per viewer per UTC day, 100 actions globally, 120 reserved provider attempts per viewer, and 400 globally. Each provider invocation reserves two attempts to cover its one possible retry. This conservative allowance counts unused retry capacity too.
-- Set `EB1_ENABLE_LIVE_CALLS = false` in cloud secrets to pause model requests. Viewing, editing, cancelling and saving an already prepared draft do not invoke models.
-- These are request limits, not a guaranteed dollar spending cap. They persist only while the server's local usage database survives. A redeploy/storage reset resets its counters; use provider-level billing controls for stronger account-wide limits.
-- The checked public index restores automatically from `corpus/index/`, with source fingerprint and file checksum validation. Nebius is used only when a signed-in viewer makes a live request.
+## Usage and state
 
-## Storage limitations
+- The Nebius key stays in server secrets. Public source text and a precomputed index are bundled, so startup needs no new parsing or embedding calls.
+- One live model operation runs at a time. Default UTC-day allowances: 30 actions and 120 reserved provider attempts per browser session, 100 actions and 400 attempts across the app. Each provider invocation reserves two attempts to cover one retry.
+- A new browser session gets a new session allowance but does not reset the global allowance. These are request limits, not a guaranteed monetary cap. A server storage reset can clear the counters.
+- Set `EB1_ENABLE_LIVE_CALLS = false` in server secrets to pause new model calls. Review, edit, cancel, and saving an existing draft remain available.
+- **Hosted work is temporary.** Refreshing or closing the page loses the anonymous workspace identity. Its server files are not immediately deleted, but a platform rebuild can clear them. The server owner can access stored questions and checklists.
+- **Local mode retains state across restarts.** Use the local app for the Week 3 checkpoint/restart demonstration. Hosted visitors can resume and edit during their active browser session, and keep approved work by downloading it.
 
-On this computer, SQLite sessions persist across app restarts. On Community Cloud, **local file persistence is not guaranteed**. Browser refresh and sign-in reuse the server's existing workspace, but a platform rebuild/replacement can remove research history and usage counters. The hosted UI states this limitation and provides approved-checklist downloads. Keep the local version for the Week 3 restart demonstration, or use an external database if guaranteed hosted durability is required.
+## Validation
 
-The owner of the server can access its data. Viewer isolation is not encryption from the app owner. This demo accepts public policy questions and has no candidate upload feature.
+`python -m pytest -q tests` passes 28 tests locally. These cover both app modes without examiner credentials, independent browser sessions (including attempted workspace selection via URL), local restart recovery, approval enforcement, atomic global limits, provider-call metering and index startup without API calls. Tests do not call Nebius. [GitHub Actions](https://github.com/bhargavkoduru/eb1-policy-desk/actions/workflows/tests.yml) runs the suite on Ubuntu with Python 3.12.
 
-## Local use and tests
+For local use, set `$env:EB1_HOSTED='false'` and run with `--server.address 127.0.0.1`, or use `start.ps1`.
 
-In PowerShell, set `$env:EB1_HOSTED='false'` and run Streamlit with `--server.address 127.0.0.1`, or use `start.ps1`. Local mode refuses to start on a non-loopback bind address.
-
-Run `python -m pytest -q tests`. All 28 tests passed locally on Windows and in [GitHub's Ubuntu/Python 3.12 validation](https://github.com/bhargavkoduru/eb1-policy-desk/actions/runs/35950905318). The hosting tests cover password verification, missing configuration, real login/logout form interactions, cross-viewer workspace isolation, atomic quotas, login limits, credential-free index startup and identity propagation into LangGraph tools. They use fake credentials and do not call Nebius.
-
-Sources: [Streamlit deployment](https://docs.streamlit.io/deploy/streamlit-community-cloud/deploy-your-app/deploy), [secret management](https://docs.streamlit.io/deploy/streamlit-community-cloud/deploy-your-app/secrets-management), [local storage limitations](https://docs.streamlit.io/develop/concepts/connections/connecting-to-data).
+Sources: [Streamlit deployment](https://docs.streamlit.io/deploy/streamlit-community-cloud/deploy-your-app/deploy), [public sharing](https://docs.streamlit.io/deploy/streamlit-community-cloud/share-your-app), [server secrets](https://docs.streamlit.io/deploy/concepts/secrets), and [browser-session lifetime](https://docs.streamlit.io/develop/api-reference/caching-and-state/st.session_state).

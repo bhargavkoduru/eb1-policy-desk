@@ -8,7 +8,7 @@ Use only Volume 6, Part F, Chapters 2 and 3 in the first version. Candidate CVs,
 
 ## Week 2
 
-One-liner: Help applicants research EB-1A/EB-1B policy questions from a dated USCIS Policy Manual snapshot in a local web app, targeting at least 90% supported factual claims in a 15-question evaluation and p95 latency below 15 seconds. These are targets to measure, not achieved results.
+One-liner: Help applicants research EB-1A/EB-1B policy questions from a dated USCIS Policy Manual snapshot in a Streamlit web app, targeting at least 90% supported factual claims in a 15-question evaluation and p95 latency below 15 seconds. These are targets to measure, not achieved results.
 
 | Planning field | Decision |
 | --- | --- |
@@ -27,7 +27,7 @@ Evaluate 15 original questions: 6 direct, 3 across both chapters, 3 ambiguous, a
 
 ## Week 3
 
-One-liner: Help users turn a policy research question into a reviewed, cited research checklist in a local web app, replacing manual searching and note-taking, using four tools and handing off when sources are insufficient or before saving. Target normal completion within two minutes and successful handling of all five workflow scenarios. Measure the manual baseline rather than inventing it.
+One-liner: Help users turn a policy research question into a reviewed, cited research checklist in a Streamlit web app, replacing manual searching and note-taking, using four tools and handing off when sources are insufficient or before saving. Target normal completion within two minutes and successful handling of all five workflow scenarios. Measure the manual baseline rather than inventing it.
 
 Four tools: `search_policy` (read), `load_research_session` (read), `draft_checklist` (prepare structured output), and `save_approved_checklist` (write after approval).
 

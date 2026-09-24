@@ -16,10 +16,16 @@ def services(index_version, corpus_version):
     return Retriever()
 
 
-@st.cache_resource
 def research_service(viewer, index_version, corpus_version):
-    retriever = services(index_version, corpus_version)
-    return ResearchAgent(retriever, runtime=viewer_runtime(viewer))
+    # Keep the private service in this browser session, not a global cache.
+    version = (viewer, index_version, corpus_version)
+    previous = st.session_state.get('_research_service')
+    if previous is None or previous[0] != version:
+        if previous is not None:
+            previous[1].close()
+        agent = ResearchAgent(services(index_version, corpus_version), runtime=viewer_runtime(viewer))
+        st.session_state['_research_service'] = (version, agent)
+    return st.session_state['_research_service'][1]
 
 
 def sources_panel(passages):
@@ -48,8 +54,8 @@ with st.sidebar:
     category = st.selectbox('Policy category', ['Both', 'EB-1A', 'EB-1B'])
     mode = st.radio('Milestone', ['Week 2 · Policy Q&A', 'Week 3 · Research checklist'])
     if hosted():
-        st.caption('Your research workspace is separate from other viewer accounts. Questions and policy excerpts go to Nebius.')
-        st.caption('This hosted demo may reset its saved data after a server rebuild. Download checklists you want to keep.')
+        st.caption('No sign-in needed. This browser session has its own workspace. Questions and policy excerpts go to Nebius.')
+        st.caption('Refreshing or closing this page starts a new workspace. Download approved checklists before leaving.')
     else:
         st.caption('Runs on this computer. Questions and retrieved policy excerpts go to Nebius. Saved sessions stay in local SQLite files.')
     st.caption('Use public policy questions here. Candidate uploads are not part of this version.')
@@ -64,7 +70,6 @@ try:
     ensure_index()
     index_version, corpus_version = manifest_path.stat().st_mtime_ns, CORPUS.stat().st_mtime_ns
     retriever = services(index_version, corpus_version)
-    agent = research_service(viewer, index_version, corpus_version)
 except Exception as exc:
     safe_error(exc)
     st.stop()
@@ -98,6 +103,11 @@ if mode.startswith('Week 2'):
         st.subheader('Retrieved passages')
         sources_panel(result['passages'])
 else:
+    try:
+        agent = research_service(viewer, index_version, corpus_version)
+    except Exception as exc:
+        safe_error(exc)
+        st.stop()
     st.subheader('Research a question, then review the checklist')
     with st.form('new_research'):
         goal = st.text_area('Research goal', placeholder='Research EB-1B judging evidence and prepare a checklist of points to verify.', max_chars=3000)

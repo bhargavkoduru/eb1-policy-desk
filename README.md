@@ -4,7 +4,20 @@ Project workspace: `C:\Users\bharg\Desktop\Python\chatbot for EB1`.
 
 This course project answers policy questions about EB-1A and EB-1B with citations, then extends the same retrieval system into a research/checklist workflow with saved state and human review.
 
-Status: **both app milestones are implemented, with cloud hosting support**. The final evaluation passed 15/15 answer/clarify/refuse checks; the expanded local suite passes 28 tests, including hosted access and viewer isolation. A separate assistant evidence audit rated 25/26 final hybrid claims supported, with one overbroad criterion statement retained as a failure. This is a research aid, not an eligibility decision. See [Week 2 results](docs/WEEK2_EVALUATION.md), [Week 3 results](docs/WEEK3_EVALUATION.md), and [cloud deployment instructions](docs/CLOUD_DEPLOYMENT.md).
+Status: **both app milestones are implemented, with cloud hosting support**. The final evaluation passed 15/15 answer/clarify/refuse checks; the expanded local suite passes 28 tests, including password-free access and browser workspace isolation. A separate assistant evidence audit rated 25/26 final hybrid claims supported, with one overbroad criterion statement retained as a failure. This is a research aid, not an eligibility decision. See [Week 2 results](docs/WEEK2_EVALUATION.md), [Week 3 results](docs/WEEK3_EVALUATION.md), and [cloud deployment instructions](docs/CLOUD_DEPLOYMENT.md).
+
+## Examiner access and submissions
+
+The hosted app opens directly, with no examiner password or API key to enter. One app and one public repository serve both weeks:
+
+| Submission | Select in the app | Documentation | Evaluation |
+| --- | --- | --- | --- |
+| Week 2 | Policy Q&A | [Week 2 draft](docs/WEEK2_SUBMISSION.md) | [RAG results](docs/WEEK2_EVALUATION.md) |
+| Week 3 | Research checklist | [Week 3 draft](docs/WEEK3_SUBMISSION.md) | [Agent results](docs/WEEK3_EVALUATION.md) |
+
+**Hosted URL: pending owner deployment.** Follow [the deployment steps](docs/CLOUD_DEPLOYMENT.md), then add the real URL to both submission drafts. Hosted visitors receive separate temporary browser workspaces; download approved checklists before refreshing or closing the page. Local mode retains research across app restarts.
+
+The handouts require a Google Doc, a live video of at most five minutes, and GitHub assets for each week. A hosted URL is an extra convenience. See the [submission checklist](docs/SUBMISSION_CHECKLIST.md) for what remains.
 
 ## Run on this computer
 
@@ -42,7 +55,7 @@ $env:EB1_HOSTED = 'false'
 .\.venv\Scripts\python.exe -m streamlit run app.py --server.address 127.0.0.1
 ```
 
-The final default chat/reranking model is `Qwen/Qwen3-235B-A22B-Instruct-2507`; embeddings use `Qwen/Qwen3-Embedding-8B` with 4,096 dimensions. API model availability can change; optional model identifiers are in `.env.example`. Changing the embedding model requires rebuilding the index. Nebius calls consume your credits; its remaining balance is checked in the account dashboard, not by this app. Hosted mode is the default and requires configured viewer logins. Use the explicit local-mode setting above only with a loopback bind address.
+The final default chat/reranking model is `Qwen/Qwen3-235B-A22B-Instruct-2507`; embeddings use `Qwen/Qwen3-Embedding-8B` with 4,096 dimensions. API model availability can change; optional model identifiers are in `.env.example`. Changing the embedding model requires rebuilding the index. Nebius calls consume your credits; its remaining balance is checked in the account dashboard, not by this app. Hosted mode is the default and opens without a login; the owner configures the Nebius key in server secrets. Use the explicit local-mode setting above only with a loopback bind address.
 
 ## Evaluation and submission
 
@@ -63,7 +76,7 @@ $env:EB1_HOSTED = 'false'
 
 The evaluation scripts make live Nebius calls; unit/UI tests use controlled substitutes for those calls. Week 2 results are cached per configuration. If results change, an evidence audit must be repeated before updating the claim-support report; `scripts.build_reports` rejects stale audit hashes.
 
-The export creates `dist/eb1-policy-desk-submission.zip` using a file allowlist and a scan for configured API keys and generated viewer access codes. It includes public corpus text, its precomputed index and public evaluation samples, and excludes credentials, cloud secrets, access codes, demo scripts, original PDFs, raw cloud jobs, local sessions and the Python environment. Google Doc creation and live video recording remain submission actions. A GitHub repository does not itself mean the hosted app has been deployed; follow the cloud deployment instructions.
+The export creates `dist/eb1-policy-desk-submission.zip` using a file allowlist and a scan for configured API keys and any legacy access codes. It includes public corpus text, its precomputed index and public evaluation samples, and excludes credentials, cloud secrets, access codes, demo scripts, original PDFs, raw cloud jobs, local sessions and the Python environment. Google Doc creation and live video recording remain submission actions. A GitHub repository does not itself mean the hosted app has been deployed; follow the cloud deployment instructions.
 
 ## Source material
 
@@ -86,7 +99,7 @@ Two local PDF readers returned garbled text because the printed PDF uses Type 3 
 - `app.py`: both Streamlit milestones.
 - `evals/` and `tests/`: measured public-policy runs and controlled workflow/UI checks.
 
-PDFs, `.env`, cloud secrets, viewer access codes, runtime data and local databases are excluded from Git. Only public USCIS excerpts were sent to LlamaCloud during preparation. Questions and retrieved passages go to Nebius during use. Candidate records are outside the initial scope. Local mode binds only to this computer. Hosted mode requires a viewer login and separates research files by account; local server files are not additionally encrypted by the application. Hosted storage can reset on a platform rebuild, so download approved checklists you want to keep.
+PDFs, `.env`, cloud secrets, viewer access codes, runtime data and local databases are excluded from Git. Only public USCIS excerpts were sent to LlamaCloud during preparation. Questions and retrieved passages go to Nebius during use. Candidate records are outside the initial scope. Local mode binds only to this computer. Hosted mode separates research files by a randomly generated browser-session identity; local server files are not additionally encrypted by the application. Refreshing or closing the browser loses access to that hosted workspace, and server rebuilds can clear stored files. Download approved checklists before leaving.
 
 ## Reproduce source preparation
 

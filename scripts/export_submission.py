@@ -49,7 +49,7 @@ def main():
         for path in sorted(set(files)):
             archive.write(path, path.relative_to(ROOT).as_posix())
     print(json.dumps({'zip': str(target), 'files': len(set(files)), 'bytes': target.stat().st_size,
-                      'secret_scan': 'API keys and generated viewer codes passed', 'included': 'public policy index',
+                      'secret_scan': 'configured credentials passed', 'included': 'public policy index',
                       'excluded': ['.env', 'original PDFs', 'cloud job responses', 'runtime sessions', '.venv', 'demo scripts', 'cloud secrets', 'viewer access codes']}))
 
 if __name__ == '__main__':

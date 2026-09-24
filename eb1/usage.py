@@ -4,7 +4,6 @@ from contextvars import ContextVar
 from datetime import datetime, timezone
 import sqlite3
 import threading
-import time
 from .config import RUNTIME, hosted, setting
 
 _actor = ContextVar('eb1_viewer', default=None)
@@ -21,14 +20,13 @@ class UsageLedger:
         self.path.parent.mkdir(parents=True, exist_ok=True)
         with self.connect() as con:
             con.execute('CREATE TABLE IF NOT EXISTS daily_usage (day TEXT, actor TEXT, kind TEXT, units INTEGER, PRIMARY KEY(day,actor,kind))')
-            con.execute('CREATE TABLE IF NOT EXISTS login_attempts (actor TEXT, at REAL)')
 
     def connect(self):
         return sqlite3.connect(self.path, timeout=10)
 
     def reserve(self, actor, kind, units, viewer_limit, global_limit):
         if not actor or units < 1:
-            raise UsageLimitError('A signed-in viewer is required for model access.')
+            raise UsageLimitError('An active demo session is required for model access.')
         day = datetime.now(timezone.utc).date().isoformat()
         with self.connect() as con:
             con.execute('BEGIN IMMEDIATE')
@@ -37,18 +35,6 @@ class UsageLedger:
             if used + units > viewer_limit or all_used + units > global_limit:
                 raise UsageLimitError('The demo usage allowance is reached for today (UTC). Please try tomorrow or contact the project owner.')
             con.execute('INSERT INTO daily_usage VALUES(?,?,?,?) ON CONFLICT(day,actor,kind) DO UPDATE SET units=units+excluded.units', (day, actor, kind, units))
-
-    def login_attempt(self, actor):
-        now = time.time()
-        with self.connect() as con:
-            con.execute('BEGIN IMMEDIATE')
-            con.execute('DELETE FROM login_attempts WHERE at < ?', (now - 600,))
-            attempts = con.execute('SELECT COUNT(*) FROM login_attempts WHERE actor=?', (actor,)).fetchone()[0]
-            global_attempts = con.execute('SELECT COUNT(*) FROM login_attempts').fetchone()[0]
-            if attempts >= 8 or global_attempts >= 100:
-                raise UsageLimitError('Too many sign-in attempts. Please wait ten minutes.')
-            con.execute('INSERT INTO login_attempts VALUES(?,?)', (actor, now))
-
 
 def ledger():
     return UsageLedger(RUNTIME / 'usage.sqlite')

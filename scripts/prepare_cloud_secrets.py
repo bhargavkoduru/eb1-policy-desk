@@ -1,33 +1,34 @@
-"""Create deployment settings locally. Never print credentials or access codes."""
+"""Prepare owner-only API settings for the public, password-free demo."""
 import json
-import secrets
+import tomllib
 from eb1.config import ROOT, api_key
-from eb1.access import password_hash
 
 
 def main():
     target = ROOT / 'runtime/deployment'
     target.mkdir(parents=True, exist_ok=True)
     config_path = target / 'streamlit.secrets.toml'
-    access_path = target / 'VIEWER_ACCESS.txt'
-    if config_path.exists() or access_path.exists():
-        if not (config_path.exists() and access_path.exists()):
-            raise ValueError('Incomplete deployment settings: inspect locally before regenerating.')
-        print('Existing deployment settings reused; no codes were changed.')
-        return
-    codes = {name: secrets.token_urlsafe(24) for name in ('owner', 'examiner')}
-    lines = ['# Copy into Streamlit Advanced settings > Secrets. Never upload this file to GitHub.',
-             'EB1_HOSTED = true', 'EB1_ENABLE_LIVE_CALLS = true',
-             'NEBIUS_API_KEY = ' + json.dumps(api_key()),
-             'EB1_VIEWER_DAILY_ACTIONS = 30', 'EB1_GLOBAL_DAILY_ACTIONS = 100',
-             'EB1_VIEWER_DAILY_ATTEMPTS = 120', 'EB1_GLOBAL_DAILY_ATTEMPTS = 400', '', '[viewers]']
-    lines += [name + ' = ' + json.dumps(password_hash(code)) for name, code in codes.items()]
+    existing = tomllib.loads(config_path.read_text(encoding='utf-8')) if config_path.exists() else {}
+    config = {
+        'EB1_HOSTED': True,
+        'EB1_ENABLE_LIVE_CALLS': existing.get('EB1_ENABLE_LIVE_CALLS', True),
+        'NEBIUS_API_KEY': existing.get('NEBIUS_API_KEY') or api_key(),
+        'EB1_VIEWER_DAILY_ACTIONS': existing.get('EB1_VIEWER_DAILY_ACTIONS', 30),
+        'EB1_GLOBAL_DAILY_ACTIONS': existing.get('EB1_GLOBAL_DAILY_ACTIONS', 100),
+        'EB1_VIEWER_DAILY_ATTEMPTS': existing.get('EB1_VIEWER_DAILY_ATTEMPTS', 120),
+        'EB1_GLOBAL_DAILY_ATTEMPTS': existing.get('EB1_GLOBAL_DAILY_ATTEMPTS', 400),
+    }
+    # Replace obsolete viewer hashes while preserving the key and owner limits.
+    lines = ['# Owner only: paste into Streamlit Advanced settings > Secrets. Never upload to GitHub.']
+    lines += [name + ' = ' + json.dumps(value) for name, value in config.items()]
     config_path.write_text('\n'.join(lines) + '\n', encoding='utf-8')
-    access_path.write_text('PRIVATE: do not upload to GitHub or the submission ZIP.\n'
-                           'Share only the examiner login through your private course submission.\n'
-                           'Anyone using the same username shares that username\'s research workspace.\n\n'
-                           + '\n\n'.join('Username: ' + name + '\nAccess code: ' + code for name, code in codes.items()), encoding='utf-8')
-    print(json.dumps({'secrets_file': str(config_path), 'access_file': str(access_path), 'credentials_printed': False}))
+    (target / 'VIEWER_ACCESS.txt').write_text(
+        'No examiner username or password is needed.\n'
+        'The public app creates a separate workspace for each browser session.\n'
+        'Share the deployed app URL in both submissions.\n'
+        'API settings in streamlit.secrets.toml are for the owner only.\n'
+        'See docs/CLOUD_DEPLOYMENT.md for the remaining hosting steps.\n', encoding='utf-8')
+    print(json.dumps({'secrets_file': str(config_path), 'examiner_login_required': False, 'credentials_printed': False}))
 
 
 if __name__ == '__main__':

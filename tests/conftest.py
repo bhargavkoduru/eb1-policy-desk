@@ -3,7 +3,7 @@ import pytest
 
 @pytest.fixture(autouse=True)
 def local_tests(monkeypatch):
-    # Tests opt into hosted mode explicitly; no test uses a real viewer secret.
+    # Tests opt into hosted mode explicitly; provider calls use substitutes.
     monkeypatch.setenv('EB1_HOSTED', 'false')
     import streamlit as st
     original = st.get_option

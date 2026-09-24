@@ -1,6 +1,7 @@
 from concurrent.futures import ThreadPoolExecutor
 import json
 from pathlib import Path
+import secrets
 import pytest
 import streamlit as st
 from streamlit.testing.v1 import AppTest
@@ -11,19 +12,19 @@ from eb1.usage import UsageLedger, UsageLimitError
 APP = str(Path(__file__).resolve().parents[1] / 'app.py')
 
 
-def test_password_hash_validation():
-    stored = access.password_hash('random-test-access-code')
-    assert access.verify_password('random-test-access-code', stored)
-    assert not access.verify_password('incorrect', stored)
-    assert not access.verify_password('anything', 'invalid')
-    assert not access.verify_password('anything', 'pbkdf2_sha256$999999999$abc$def')
+def test_local_mode_rejects_public_bind(monkeypatch):
+    monkeypatch.setattr(st, 'get_option', lambda name: '0.0.0.0')
+    app = AppTest.from_file(APP, default_timeout=20).run()
+    assert not app.exception
+    assert any('Local mode must bind' in e.value for e in app.error)
+    assert not any(b.label == 'Find a cited answer' for b in app.button)
 
 
 def test_workspace_separation_and_path_rejection(tmp_path, monkeypatch):
     monkeypatch.setenv('EB1_HOSTED', 'true')
     monkeypatch.setattr(access, 'RUNTIME', tmp_path)
-    alice = access.viewer_runtime(access.workspace_id('alice'))
-    bob = access.viewer_runtime(access.workspace_id('bob'))
+    alice = access.viewer_runtime(secrets.token_hex(32))
+    bob = access.viewer_runtime(secrets.token_hex(32))
     assert alice != bob and alice.is_relative_to(tmp_path)
     with pytest.raises((ValueError, PermissionError)):
         access.viewer_runtime('../../alice')
@@ -56,16 +57,12 @@ def test_atomic_usage_and_global_limit(tmp_path):
         restarted.reserve('new-viewer', 'attempts', 1, 100, 5)
 
 
-def test_viewer_limit_and_failed_login_limit(tmp_path):
+def test_viewer_limit_preserves_other_sessions_allowance(tmp_path):
     meter = UsageLedger(tmp_path / 'usage.sqlite')
     meter.reserve('alice', 'attempts', 2, 2, 20)
     with pytest.raises(UsageLimitError):
         meter.reserve('alice', 'attempts', 1, 2, 20)
     meter.reserve('bob', 'attempts', 1, 2, 20)
-    for _ in range(8):
-        meter.login_attempt('alice')
-    with pytest.raises(UsageLimitError):
-        meter.login_attempt('alice')
 
 
 def test_provider_denied_without_actor_and_kill_switch(tmp_path, monkeypatch):
@@ -81,7 +78,7 @@ def test_provider_denied_without_actor_and_kill_switch(tmp_path, monkeypatch):
             pytest.fail('Paused demo must not execute a call')
 
 
-def test_graph_threads_keep_authenticated_actor(tmp_path, monkeypatch):
+def test_graph_threads_keep_session_actor(tmp_path, monkeypatch):
     monkeypatch.setenv('EB1_HOSTED', 'true')
     monkeypatch.setattr(usage, 'RUNTIME', tmp_path / 'meter')
     seen = []
@@ -106,38 +103,50 @@ def test_cloud_bootstrap_without_api_calls(tmp_path, monkeypatch):
     bootstrap.ensure_index()  # Existing complete copy remains reusable.
 
 
-def test_missing_auth_configuration_stops_before_app(monkeypatch):
+def test_public_demo_opens_both_modes_without_credentials(tmp_path, monkeypatch):
     monkeypatch.setenv('EB1_HOSTED', 'true')
-    monkeypatch.setattr(access, 'setting', lambda name, default=None: {} if name == 'viewers' else default)
+    monkeypatch.setenv('NEBIUS_API_KEY', '')
+    monkeypatch.setattr(access, 'RUNTIME', tmp_path)
     st.cache_resource.clear()
     app = AppTest.from_file(APP, default_timeout=20).run()
     assert not app.exception
-    assert any('awaiting its private access settings' in e.value for e in app.error)
-    assert not any(b.label == 'Find a cited answer' for b in app.button)
-
-
-def test_login_logout_and_relogin_keep_workspaces_separate(tmp_path, monkeypatch):
-    monkeypatch.setenv('EB1_HOSTED', 'true')
-    monkeypatch.setattr(access, 'RUNTIME', tmp_path / 'viewers')
-    monkeypatch.setattr(usage, 'RUNTIME', tmp_path / 'meter')
-    viewers = {'alice': access.password_hash('alice-test-code'), 'bob': access.password_hash('bob-test-code')}
-    monkeypatch.setattr(access, 'setting', lambda name, default=None: viewers if name == 'viewers' else default)
-    st.cache_resource.clear()
-    app = AppTest.from_file(APP, default_timeout=20).run()
-    assert not app.exception
-    app.text_input[0].set_value('alice')
-    app.text_input[1].set_value('alice-test-code')
-    next(b for b in app.button if b.label == 'Sign in').click().run()
-    assert not app.exception
+    assert not app.error
     assert any(b.label == 'Find a cited answer' for b in app.button)
-    app.session_state['last_answer'] = {'question': 'private alice content'}
-    # Logout happens before any previous answer can be rendered again.
-    next(b for b in app.sidebar.button if b.label == 'Sign out').click().run()
-    assert not app.exception
-    app.text_input[0].set_value('bob')
-    app.text_input[1].set_value('bob-test-code')
-    next(b for b in app.button if b.label == 'Sign in').click().run()
-    assert not app.exception
-    assert all('private alice content' not in m.value for m in app.markdown)
-    assert app.session_state['_viewer_auth']['username'] == 'bob'
+    assert not any(b.label == 'Sign in' for b in app.button)
+    assert not app.text_input
+    visitor = app.session_state['_visitor_id']
+    app.sidebar.radio[0].set_value('Week 3 · Research checklist').run()
+    assert not app.exception and not app.error
+    assert any(b.label == 'Start research' for b in app.button)
+    assert app.session_state['_visitor_id'] == visitor
+    app.session_state['_research_service'][1].close()
+
+
+def test_browser_sessions_cannot_reuse_another_workspace(tmp_path, monkeypatch):
+    monkeypatch.setenv('EB1_HOSTED', 'true')
+    monkeypatch.setattr(access, 'RUNTIME', tmp_path)
+    st.cache_resource.clear()
+    alice = AppTest.from_file(APP, default_timeout=20).run()
+    alice.sidebar.radio[0].set_value('Week 3 · Research checklist').run()
+    a = alice.session_state['_research_service'][1]
+    a.planner = lambda *args: {'action': 'handoff', 'message': 'Test only'}
+    ident = a.start('Question belonging only to the first visitor', 'EB-1A')
+    alice.run()
+    assert alice.session_state['research_id'] == ident
+    bob = AppTest.from_file(APP, default_timeout=20)
+    bob.query_params['_visitor_id'] = alice.session_state['_visitor_id']
+    bob.query_params['research_id'] = ident
+    bob.run()
+    bob.sidebar.radio[0].set_value('Week 3 · Research checklist').run()
+    assert not alice.exception and not bob.exception
+    assert alice.session_state['_visitor_id'] != bob.session_state['_visitor_id']
+    b = bob.session_state['_research_service'][1]
+    assert b is not a and b.store.sessions() == []
+    assert not b.snapshot(ident).values
+    assert not any(s.label == 'Resume a research session' for s in bob.selectbox)
+    # An unrelated browser session does not disrupt the first visitor's state.
+    alice.run()
+    assert alice.session_state['research_id'] == ident
+    a.close()
+    b.close()
     st.cache_resource.clear()
