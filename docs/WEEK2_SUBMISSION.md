@@ -24,7 +24,6 @@ Selected user prompts given to Codex, reproduced verbatim:
 
 - "Let's consider a simple project that can check all boxes laid out in the week2 and 3 files but can be wrapped up sooner, using any public repositories"
 - "I have downloaded the Policy manual and created a pdf for the pages covering Employment based immigration"
-- "don't include the demo scripts in github"
 
 ## Evaluation, iterations and learnings
 
@@ -44,5 +43,4 @@ The hosted URL is still pending deployment. The app can also be run locally usin
 
 - GitHub repository: https://github.com/bhargavkoduru/eb1-policy-qa-week2 (public; no examiner invitation needed).
 - Hosted app URL: add the actual deployed URL (optional extra alongside the required deliverables).
-- Live demo video, at most five minutes: add after recording.
 - Google Doc: paste this document and the evaluation report into your own Google Doc.

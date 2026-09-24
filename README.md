@@ -9,7 +9,9 @@ Submit the dedicated repository for each week:
 | Week 2 | [EB-1 Policy Q&A](https://github.com/bhargavkoduru/eb1-policy-qa-week2) | `eb1-policy-qa-week2` |
 | Week 3 | [EB-1 Research Agent](https://github.com/bhargavkoduru/eb1-research-agent-week3) | `eb1-research-agent-week3` |
 
-Each repository contains its own app, setup instructions, Google Doc draft, evaluation and deployment guide. Week 2 opens directly to Q&A; Week 3 opens directly to the reviewed-checklist workflow. Both exclude API keys and demo scripts. Separate local suites passed 13 and 27 tests respectively.
+Each repository contains its own app, setup instructions, Google Doc draft, evaluation and deployment guide. Week 2 opens directly to Q&A; Week 3 opens directly to the reviewed-checklist workflow. Both exclude API keys. Separate local suites passed 13 and 27 tests respectively.
+
+Editable reports: [Week 2 Word document](docs/WEEK2_PROJECT_REPORT.docx) and [Week 3 Word document](docs/WEEK3_PROJECT_REPORT.docx). Each includes its submission write-up and evaluation; upload the relevant file to Google Drive and open it with Google Docs.
 
 This folder remains the combined development workspace. Its instructions below describe the combined app; use the two links above for course submissions.
 
@@ -30,7 +32,7 @@ For course submissions, use the two separate repositories above. This combined d
 
 **Hosted URLs: pending owner deployment.** Follow [the deployment steps](docs/CLOUD_DEPLOYMENT.md), then add each real URL to its corresponding submission draft. Hosted visitors receive separate temporary browser workspaces; download approved checklists before refreshing or closing the page. Local mode retains research across app restarts.
 
-The handouts require a Google Doc, a live video of at most five minutes, and GitHub assets for each week. A hosted URL is an extra convenience. See the [submission checklist](docs/SUBMISSION_CHECKLIST.md) for what remains.
+The separate repositories provide documentation and code assets for each week. A hosted URL is an extra convenience. See the [submission checklist](docs/SUBMISSION_CHECKLIST.md) for the document and code links.
 
 ## Run on this computer
 
@@ -89,7 +91,7 @@ $env:EB1_HOSTED = 'false'
 
 The evaluation scripts make live Nebius calls; unit/UI tests use controlled substitutes for those calls. Week 2 results are cached per configuration. If results change, an evidence audit must be repeated before updating the claim-support report; `scripts.build_reports` rejects stale audit hashes.
 
-The export creates `dist/eb1-policy-desk-submission.zip` using a file allowlist and a scan for configured API keys and any legacy access codes. It includes public corpus text, its precomputed index and public evaluation samples, and excludes credentials, cloud secrets, access codes, demo scripts, original PDFs, raw cloud jobs, local sessions and the Python environment. Google Doc creation and live video recording remain submission actions. A GitHub repository does not itself mean the hosted app has been deployed; follow the cloud deployment instructions.
+The export creates `dist/eb1-policy-desk-submission.zip` using a file allowlist and a scan for configured API keys and any legacy access codes. It includes public corpus text, its precomputed index and public evaluation samples, and excludes credentials, cloud secrets, access codes, original PDFs, raw cloud jobs, local sessions and the Python environment. Google Doc conversion remains a submission action. A GitHub repository does not itself mean the hosted app has been deployed; follow the cloud deployment instructions.
 
 ## Source material
 

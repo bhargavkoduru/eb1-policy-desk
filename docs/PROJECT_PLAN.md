@@ -41,6 +41,6 @@ Five scenarios: successful reviewed save; missing information; unsupported quest
 
 After source preparation and environment/model checks, target one hour per core milestone. For Week 2, allocate about 35 minutes to the app, 15 to evaluation, and 10 to fixes/write-up. For Week 3, allocate about 35 minutes to the agent workflow, 15 to scenario checks, and 10 to fixes/write-up. These are stretch targets; unfinished checks remain unfinished when a time box ends.
 
-Each week still needs a Google Doc with overview, datasets, prompts/agent instructions, AI coding prompts, iterations and learnings; a live demo recording no longer than five minutes; and a GitHub link to the corresponding code/assets. Preserve separate Week 2 and Week 3 milestones and results. Recording, user review, and publication can require additional time.
+Each week still needs a Google Doc with overview, datasets, prompts/agent instructions, AI coding prompts, iterations and learnings; a GitHub link to the corresponding code/assets. Preserve separate Week 2 and Week 3 milestones and results. User review and publication can require additional time.
 
 Before submission, run a secret/data check, verify source attribution, and inspect the actual files to publish. This folder's original PDF, credentials, cloud job responses, and runtime databases stay out of Git by default.
