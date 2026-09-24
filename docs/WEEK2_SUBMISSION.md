@@ -35,12 +35,11 @@ See `docs/WEEK2_EVALUATION.md` and `evals/` for actual measurements. This small 
 
 ## Examiner access
 
-Open this repository's deployed app URL; it opens directly to this week's workflow. No password, account or API key is required from the examiner. Answers stay available during the current browser session; refreshing or closing the page clears them. The owner configures the API key on the server.
+The app runs locally with Python 3.12 and Streamlit. Clone the public repository and follow the README setup instructions. Live model requests require the reviewer's own Nebius API key in a local `.env`; credentials are not included or shared. The bundled corpus and index let the app start without another parsing or embedding job.
 
-The hosted URL is still pending deployment. The app can also be run locally using the README instructions.
+No app login is required. Answers stay in the current browser session.
 
 ## Submission links to add
 
 - GitHub repository: https://github.com/bhargavkoduru/eb1-policy-qa-week2 (public; no examiner invitation needed).
-- Hosted app URL: add the actual deployed URL (optional extra alongside the required deliverables).
-- Google Doc: paste this document and the evaluation report into your own Google Doc.
+- Google Doc: open `WEEK2_PROJECT_REPORT.docx` in Google Docs and replace `[Your name]`.

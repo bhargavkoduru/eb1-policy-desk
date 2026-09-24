@@ -1,137 +1,50 @@
 # USCIS EB-1 Policy Assistant
 
-## Separate submission repositories
+This is the original combined development workspace. Use the separate repositories below for the weekly submissions. Both projects run locally with Streamlit.
 
-Submit the dedicated repository for each week:
-
-| Week | Public GitHub repository | Local folder next to this project |
+| Week | Public repository | Editable report |
 | --- | --- | --- |
-| Week 2 | [EB-1 Policy Q&A](https://github.com/bhargavkoduru/eb1-policy-qa-week2) | `eb1-policy-qa-week2` |
-| Week 3 | [EB-1 Research Agent](https://github.com/bhargavkoduru/eb1-research-agent-week3) | `eb1-research-agent-week3` |
+| Week 2 | [EB-1 Policy Q&A](https://github.com/bhargavkoduru/eb1-policy-qa-week2) | [Week 2 Word document](docs/WEEK2_PROJECT_REPORT.docx) |
+| Week 3 | [EB-1 Research Agent](https://github.com/bhargavkoduru/eb1-research-agent-week3) | [Week 3 Word document](docs/WEEK3_PROJECT_REPORT.docx) |
 
-Each repository contains its own app, setup instructions, Google Doc draft, evaluation and deployment guide. Week 2 opens directly to Q&A; Week 3 opens directly to the reviewed-checklist workflow. Both exclude API keys. Separate local suites passed 13 and 27 tests respectively.
+The Word reports include the project overview, framework, dataset, AI coding assistance, evaluation results, limitations and repository links. Open each file in Google Docs and replace `[Your name]`.
 
-Editable reports: [Week 2 Word document](docs/WEEK2_PROJECT_REPORT.docx) and [Week 3 Word document](docs/WEEK3_PROJECT_REPORT.docx). Each includes its submission write-up and evaluation; upload the relevant file to Google Drive and open it with Google Docs.
+## Run this combined workspace locally
 
-This folder remains the combined development workspace. Its instructions below describe the combined app; use the two links above for course submissions.
-
-Project workspace: `C:\Users\bharg\Desktop\Python\chatbot for EB1`.
-
-This course project answers policy questions about EB-1A and EB-1B with citations, then extends the same retrieval system into a research/checklist workflow with saved state and human review.
-
-Status: **both app milestones are implemented, with cloud hosting support**. The final evaluation passed 15/15 answer/clarify/refuse checks; the expanded local suite passes 28 tests, including password-free access and browser workspace isolation. A separate assistant evidence audit rated 25/26 final hybrid claims supported, with one overbroad criterion statement retained as a failure. This is a research aid, not an eligibility decision. See [Week 2 results](docs/WEEK2_EVALUATION.md), [Week 3 results](docs/WEEK3_EVALUATION.md), and [cloud deployment instructions](docs/CLOUD_DEPLOYMENT.md).
-
-## Examiner access and submissions
-
-For course submissions, use the two separate repositories above. This combined development app still has both sidebar modes:
-
-| Submission | Select in the app | Documentation | Evaluation |
-| --- | --- | --- | --- |
-| Week 2 | Policy Q&A | [Week 2 draft](docs/WEEK2_SUBMISSION.md) | [RAG results](docs/WEEK2_EVALUATION.md) |
-| Week 3 | Research checklist | [Week 3 draft](docs/WEEK3_SUBMISSION.md) | [Agent results](docs/WEEK3_EVALUATION.md) |
-
-**Hosted URLs: pending owner deployment.** Follow [the deployment steps](docs/CLOUD_DEPLOYMENT.md), then add each real URL to its corresponding submission draft. Hosted visitors receive separate temporary browser workspaces; download approved checklists before refreshing or closing the page. Local mode retains research across app restarts.
-
-The separate repositories provide documentation and code assets for each week. A hosted URL is an extra convenience. See the [submission checklist](docs/SUBMISSION_CHECKLIST.md) for the document and code links.
-
-## Run on this computer
-
-Open PowerShell and run these lines. The environment, credentials, corpus and index are already prepared here:
+The local environment, credentials, public corpus and index are already prepared here. In PowerShell, from this project folder:
 
 ```powershell
-Set-Location -LiteralPath 'C:\Users\bharg\Desktop\Python\chatbot for EB1'
 $env:EB1_HOSTED = 'false'
 .\.venv\Scripts\python.exe -m streamlit run app.py --server.address 127.0.0.1
 ```
 
-Open **http://127.0.0.1:8501**. Select the policy category and the Week 2 or Week 3 mode in the sidebar. Stop a foreground server with Ctrl+C. If a server is already running at that address, use it instead of starting another copy.
+Open http://127.0.0.1:8501 and select the week in the sidebar. Each separate repository instead opens directly to its own workflow; follow its README for a fresh installation with Python 3.12 and your own Nebius key. No app login is required.
 
-- Week 2: ask a policy question, inspect the answer, open the evidence excerpts and source citations.
-- Week 3: enter a research goal, review the proposed tasks, apply edits if needed, then approve and save. Reopen the session from the dropdown after a restart.
-- Suggested first question: “For EB-1A, is an invitation to peer review enough to show judging?”
-- Suggested first research goal: “Research EB-1B judging evidence and prepare a short checklist of documentation to verify.”
+## Implementation and validation
 
-## Set up a fresh copy
+Week 2 implements ingestion, cleaning, page-aware chunks, embeddings, local persistent vectors, BM25 fusion, reranking, cited answers, clarification and refusal. The 15-question development evaluation passed all expected behavior checks. A separate assistant evidence audit supported 25/26 final factual claims; one overbroad criterion statement remains documented.
 
-Python 3.12 was used for testing. From the extracted project folder:
+Week 3 adds a LangGraph agent with four tools, SQLite checkpoints, bounded recovery and human review before final save. Local research can be resumed across app restarts. Five workflow scenarios were covered; no measured human time saving is claimed.
 
-```powershell
-python -m venv .venv
-.\.venv\Scripts\python.exe -m pip install -r requirements.txt
-Copy-Item -LiteralPath .env.example -Destination .env
-```
+The combined suite passed 28 tests. The standalone suites passed 13 tests for Week 2 and 27 for Week 3, with GitHub Actions validation. Unit and UI tests use substitutes for provider calls; live evaluation scripts consume Nebius credits.
 
-Edit `.env` locally and add your Nebius key. Run `Copy-Item` only in a fresh copy without an existing `.env`; preserve existing credentials. The included `corpus/` contains public policy text, so a new LlamaParse job is not needed to try the app.
+## Documentation
 
-```powershell
-$env:EB1_HOSTED = 'false'
-.\.venv\Scripts\python.exe -m scripts.check_nebius
-.\.venv\Scripts\python.exe -m scripts.setup_index
-.\.venv\Scripts\python.exe -m streamlit run app.py --server.address 127.0.0.1
-```
+- [Week 2 submission draft](docs/WEEK2_SUBMISSION.md) and [evaluation](docs/WEEK2_EVALUATION.md)
+- [Week 3 submission draft](docs/WEEK3_SUBMISSION.md) and [evaluation](docs/WEEK3_EVALUATION.md)
+- [Document and code checklist](docs/SUBMISSION_CHECKLIST.md)
+- [Project plan](docs/PROJECT_PLAN.md), [architecture](docs/ARCHITECTURE.md), and [source preparation](docs/SOURCE_AUDIT.md)
 
-The final default chat/reranking model is `Qwen/Qwen3-235B-A22B-Instruct-2507`; embeddings use `Qwen/Qwen3-Embedding-8B` with 4,096 dimensions. API model availability can change; optional model identifiers are in `.env.example`. Changing the embedding model requires rebuilding the index. Nebius calls consume your credits; its remaining balance is checked in the account dashboard, not by this app. Hosted mode is the default and opens without a login; the owner configures the Nebius key in server secrets. Use the explicit local-mode setting above only with a loopback bind address.
+## Source and data handling
 
-## Evaluation and submission
+The corpus uses 23 unique pages from USCIS Policy Manual Volume 6, Part F, Chapters 2 and 3, printed September 23, 2026. The print date is not the effective date of every provision. LlamaParse OCR produced cached Markdown after direct PDF extraction proved garbled; 65 chunks and precomputed embeddings are included for reproducibility.
 
-- [Week 2 Google Doc draft](docs/WEEK2_SUBMISSION.md)
-- [Week 3 Google Doc draft](docs/WEEK3_SUBMISSION.md)
-- [Requirement mapping and remaining submission actions](docs/SUBMISSION_CHECKLIST.md)
-- [Architecture and data locations](docs/ARCHITECTURE.md)
-- [Deploy for examiner access](docs/CLOUD_DEPLOYMENT.md)
-- [Build plan](docs/PROJECT_PLAN.md) and [source preparation report](docs/SOURCE_AUDIT.md)
+Questions and retrieved policy passages go to Nebius. Local answers and research files are not published. API keys, original PDFs, private settings, runtime databases and the Python environment are excluded from Git. The included corpus and evaluation examples contain public policy material only.
 
 ```powershell
 $env:EB1_HOSTED = 'false'
 .\.venv\Scripts\python.exe -m pytest -q tests
-.\.venv\Scripts\python.exe -m scripts.evaluate
-.\.venv\Scripts\python.exe -m scripts.smoke_week3
 .\.venv\Scripts\python.exe -m scripts.export_submission
 ```
 
-The evaluation scripts make live Nebius calls; unit/UI tests use controlled substitutes for those calls. Week 2 results are cached per configuration. If results change, an evidence audit must be repeated before updating the claim-support report; `scripts.build_reports` rejects stale audit hashes.
-
-The export creates `dist/eb1-policy-desk-submission.zip` using a file allowlist and a scan for configured API keys and any legacy access codes. It includes public corpus text, its precomputed index and public evaluation samples, and excludes credentials, cloud secrets, access codes, original PDFs, raw cloud jobs, local sessions and the Python environment. Google Doc conversion remains a submission action. A GitHub repository does not itself mean the hosted app has been deployed; follow the cloud deployment instructions.
-
-## Source material
-
-The user supplied `Policy Manual_USCIS_eb.pdf`, a 105-page excerpt printed September 23, 2026. It contains a wider selection of employment-based immigration material. The initial corpus uses source PDF pages 2-24, containing Volume 6, Part F, Chapter 2 (Extraordinary Ability) and Chapter 3 (Outstanding Professor or Researcher), with neighboring material removed after parsing.
-
-Two local PDF readers returned garbled text because the printed PDF uses Type 3 fonts without usable character mappings. We preserve the original, correct page orientation in a derivative, and render selected pages for LlamaParse OCR. This is source preparation, not legal interpretation. The print date does not establish the effective date of each policy provision.
-
-## Files and data
-
-- `.env`: your existing credentials; ignored by Git. Do not paste it into a document or commit it.
-- `.env.example`: blank variable names for a reproducible setup.
-- `scripts/prepare_pdf.py`: selected pages to an upright image PDF with a source hash and page map; requires PyMuPDF.
-- `scripts/parse_policy.py`: submit/retrieve LlamaParse jobs; uses Python's standard library and does not print keys.
-- `scripts/build_corpus.py`: trim to the two selected chapters and preserve source page references.
-- `data/prepared/`: OCR inputs and page manifests.
-- `data/parsed/`: cached parse jobs and per-page Markdown.
-- `data/corpus/`: the two chapter documents, page records, and a source manifest.
-- `corpus/`: public-only corpus copy included with the submission; used when `data/corpus/` is absent.
-- `eb1/`: retrieval, cited answers and the persistent research agent.
-- `app.py`: both Streamlit milestones.
-- `evals/` and `tests/`: measured public-policy runs and controlled workflow/UI checks.
-
-PDFs, `.env`, cloud secrets, viewer access codes, runtime data and local databases are excluded from Git. Only public USCIS excerpts were sent to LlamaCloud during preparation. Questions and retrieved passages go to Nebius during use. Candidate records are outside the initial scope. Local mode binds only to this computer. Hosted mode separates research files by a randomly generated browser-session identity; local server files are not additionally encrypted by the application. Refreshing or closing the browser loses access to that hosted workspace, and server rebuilds can clear stored files. Download approved checklists before leaving.
-
-## Reproduce source preparation
-
-Install PyMuPDF in your project Python environment first. From this folder:
-
-```powershell
-python scripts/prepare_pdf.py --start 2 --end 2 --name pilot
-python scripts/parse_policy.py start pilot
-python scripts/parse_policy.py poll pilot
-python scripts/prepare_pdf.py --start 3 --end 24 --name eb1_remainder
-python scripts/parse_policy.py start eb1_remainder
-python scripts/parse_policy.py poll eb1_remainder
-python scripts/build_corpus.py
-```
-
-Repeat `poll` if a job is pending/running. Existing job IDs and completed results are reused. The preparation script rejects a changed source under the same name, and an uncertain submission is not retried automatically. Treat a failed/empty/misordered parse as a problem to resolve, not a valid corpus.
-
-The selected parser is the agentic tier, pinned to version `2026-09-13`. The completed jobs reported **230 credits used**: 10 for the pilot page and 220 for the remaining 22 pages. A subsequent account check reported **49,770 LlamaCloud credits remaining** on September 23, 2026. Reusing the cached Markdown does not submit a new parse. [LlamaParse pricing](https://developers.llamaindex.ai/llamaparse/general/pricing/)
-
-The original document remains the source for visual checks. OCR text requires review, especially tables, numbers, superscripts, and footnotes. Future answers should cite the chapter, section, and source PDF page and clearly identify the snapshot used.
+The allowlisted export includes the two Word reports and scans their uncompressed contents for configured credentials. The independent weekly repositories also provide their own exports.
