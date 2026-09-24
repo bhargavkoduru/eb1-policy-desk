@@ -28,6 +28,13 @@ Reuse the Week 2 public USCIS corpus and local index. The planner uses `Qwen/Qwe
 
 Codex generated and revised original code from the user's requested scope. Testing specifically targeted restart behavior, edit-before-approval, cancellation, tool failures and duplicate-save prevention. Initial live testing exposed a generic checklist that did not address judging; a stronger model and an explicit focus check corrected that failure.
 
+Selected user prompts given to Codex, reproduced verbatim:
+
+- "Let's consider a simple project that can check all boxes laid out in the week2 and 3 files but can be wrapped up sooner, using any public repositories"
+- "I can't share the password with examiner,etc. let's keep it simple and make sure everything streamlines iwth submission details for week 2 and 3"
+
+The latter request led to anonymous browser workspaces and updated submission instructions while retaining the agent's review-before-save boundary.
+
 ## Evaluation and learnings
 
 The current local suite passed 28 tests, including Streamlit form interactions, password-free hosted access, workspace isolation and usage limits. Live checks covered a judged-evidence checklist with simulated review, ambiguity/cancellation and unsupported requests. Error/retry scenarios use controlled injected failures. See `docs/WEEK3_EVALUATION.md` and `evals/week3_live.json`.

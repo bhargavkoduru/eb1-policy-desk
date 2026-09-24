@@ -20,6 +20,12 @@ The answer instruction requires the model to use only supplied evidence, clarify
 
 The user's scoping requests included a simple project that covers both handouts, uses existing Nebius/LlamaCloud credits, and can be completed quickly. Codex was asked to proceed with implementation in the selected local folder. Codex wrote original Python/Streamlit code, prepared the corpus, ran live evaluations and revised failure cases. The Academy solution kit informed the pattern but its implementation was not copied.
 
+Selected user prompts given to Codex, reproduced verbatim:
+
+- "Let's consider a simple project that can check all boxes laid out in the week2 and 3 files but can be wrapped up sooner, using any public repositories"
+- "I have downloaded the Policy manual and created a pdf for the pages covering Employment based immigration"
+- "don't include the demo scripts in github"
+
 ## Evaluation, iterations and learnings
 
 Fifteen original questions cover six direct questions, three cross-chapter questions, three ambiguous requests and three unsupported requests. Gold passages and expected behavior were defined before evaluation. Dense retrieval is compared with hybrid retrieval plus reranking. The evaluation report includes measured retrieval scores, latency, citation checks, claim-support review and a retained failure.
