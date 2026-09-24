@@ -8,7 +8,7 @@ from dotenv import dotenv_values
 from eb1.config import ROOT
 
 def public_files():
-    files = [ROOT / name for name in ('app.py', 'README.md', 'requirements.txt', 'requirements.in', '.gitignore', '.env.example', 'start.ps1')]
+    files = [ROOT / name for name in ('app.py', 'README.md', 'requirements.txt', 'requirements.in', '.gitignore', '.gitattributes', '.env.example', 'start.ps1')]
     patterns = {'eb1': '*.py', 'scripts': '*.py', 'tests': '*.py', 'docs': '*.md',
                 'corpus': '*', '.streamlit': '*.toml', 'evals': '*.json'}
     for folder, pattern in patterns.items():
