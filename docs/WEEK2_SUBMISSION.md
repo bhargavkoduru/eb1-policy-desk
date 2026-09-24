@@ -36,13 +36,13 @@ See `docs/WEEK2_EVALUATION.md` and `evals/` for actual measurements. This small 
 
 ## Examiner access
 
-Use the shared public app URL and select **Week 2 - Policy Q&A** in the sidebar. No password, account or API key is required from the examiner. Hosted work stays available during the current browser session; download approved checklists before refreshing or closing the page. The owner configures the API key on the server.
+Open this repository's deployed app URL; it opens directly to this week's workflow. No password, account or API key is required from the examiner. Answers stay available during the current browser session; refreshing or closing the page clears them. The owner configures the API key on the server.
 
 The hosted URL is still pending deployment. The app can also be run locally using the README instructions.
 
 ## Submission links to add
 
-- GitHub repository: https://github.com/bhargavkoduru/eb1-policy-desk (public; no examiner invitation needed).
+- GitHub repository: https://github.com/bhargavkoduru/eb1-policy-qa-week2 (public; no examiner invitation needed).
 - Hosted app URL: add the actual deployed URL (optional extra alongside the required deliverables).
 - Live demo video, at most five minutes: add after recording.
 - Google Doc: paste this document and the evaluation report into your own Google Doc.

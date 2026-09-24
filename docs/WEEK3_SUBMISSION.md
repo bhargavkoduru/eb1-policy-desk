@@ -9,7 +9,7 @@ My agent helps applicants turn an EB-1 policy research question into a cited, re
 | Field | Implementation |
 | --- | --- |
 | Goal | Research a policy question and prepare a checklist that the user can inspect, edit and approve. |
-| Surface | Streamlit, Week 3 mode; public hosted demo or local use. |
+| Surface | Standalone Streamlit research app; public hosted demo or local use. |
 | Steps | Choose whether to clarify, load, search again, draft or hand off; pause for review; save after approval. |
 | Tools | `search_policy` and `load_research_session` read; `draft_checklist` prepares a draft; `save_approved_checklist` writes a final approved record. |
 | Memory | Goal, category, history, evidence, trace, draft and review state use SQLite checkpoints. Local mode recovers across restarts; the anonymous hosted demo exposes only the current browser workspace. |
@@ -37,19 +37,19 @@ The latter request led to anonymous browser workspaces and updated submission in
 
 ## Evaluation and learnings
 
-The current local suite passed 28 tests, including Streamlit form interactions, password-free hosted access, workspace isolation and usage limits. Live checks covered a judged-evidence checklist with simulated review, ambiguity/cancellation and unsupported requests. Error/retry scenarios use controlled injected failures. See `docs/WEEK3_EVALUATION.md` and `evals/week3_live.json`.
+The standalone suite passed 27 tests, including Streamlit form interactions, password-free hosted access, workspace isolation and usage limits. Live checks covered a judged-evidence checklist with simulated review, ambiguity/cancellation and unsupported requests. Error/retry scenarios use controlled injected failures. See `docs/WEEK3_EVALUATION.md` and `evals/week3_live.json`.
 
 Approval belongs in code, not only in the prompt. A durable checkpoint is necessary to resume an unfinished review. A successful save is not sufficient evidence of a useful checklist: topic focus and claim support must also be checked. No measured human time saving is claimed until the manual baseline is recorded.
 
 ## Examiner access
 
-Use the shared public app URL and select **Week 3 - Research checklist** in the sidebar. No password, account or API key is required from the examiner. Hosted work stays available during the current browser session; download approved checklists before refreshing or closing the page. The owner configures the API key on the server.
+Open this repository's deployed app URL; it opens directly to this week's workflow. No password, account or API key is required from the examiner. Hosted work stays available during the current browser session; download approved checklists before refreshing or closing the page. The owner configures the API key on the server.
 
 The hosted URL is still pending deployment. The app can also be run locally using the README instructions.
 
 ## Submission links to add
 
-- GitHub repository: https://github.com/bhargavkoduru/eb1-policy-desk (public; Week 3 is the Research checklist mode in the shared app).
+- GitHub repository: https://github.com/bhargavkoduru/eb1-research-agent-week3 (public; standalone Week 3 app).
 - Hosted app URL: add the actual deployed URL (optional extra alongside the required deliverables).
 - Live demo video, at most five minutes: add after recording.
 - Google Doc: paste this document and the Week 3 evaluation report into your own Google Doc.

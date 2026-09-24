@@ -11,7 +11,7 @@ The handouts permit a custom use case. This project follows their RAG and agent 
 | Cited answers and refusal | Evidence-ID selection, exact source text, page links, ambiguous-category clarification and unsupported responses. |
 | Fifteen-question evaluation and failure analysis | `WEEK2_EVALUATION.md`, definitions and raw runs under `evals/`. |
 | Overview, dataset, prompts, iterations, learnings | Google Doc draft in `WEEK2_SUBMISSION.md`; exact runtime prompts in source. |
-| GitHub assets and live video up to five minutes | Code published in the shared repository; inspected ZIP prepared. Video recording remains. |
+| GitHub assets and live video up to five minutes | Code and evaluation published in the [Week 2 repository](https://github.com/bhargavkoduru/eb1-policy-qa-week2). Video recording remains. |
 
 | Week 3 item | Evidence/status |
 | --- | --- |
@@ -22,27 +22,29 @@ The handouts permit a custom use case. This project follows their RAG and agent 
 | End-to-end validation | Five scenario categories covered by live and deterministic checks; 28 total tests passed, including hosted access/isolation checks. |
 | Documentation and prompts | `WEEK3_SUBMISSION.md`, `WEEK3_EVALUATION.md`, `ARCHITECTURE.md` and `eb1/research.py`. |
 | Manual baseline comparison | Not measured. Time one manual policy search and checklist preparation before claiming a time-saving percentage. |
-| GitHub assets and live video up to five minutes | Shared repository and ZIP contain both modes. Separate Week 3 video recording remains. |
+| GitHub assets and live video up to five minutes | Code and evaluation published in the [Week 3 repository](https://github.com/bhargavkoduru/eb1-research-agent-week3). Video recording remains. |
 
-## One app, two submissions
+## Separate repositories for the two submissions
 
-The examiner opens the public app URL without signing in, then selects the relevant week in the sidebar. The same GitHub repository and hosted URL can appear in both submissions; each week has its own documentation, evaluation and video.
+Each week has a standalone repository, app, documentation and evaluation. The examiner opens the relevant deployed app directly without signing in; neither standalone app has a week selector.
 
 | Submit | Week 2 | Week 3 |
 | --- | --- | --- |
 | Google Doc | Copy `WEEK2_SUBMISSION.md` and the Week 2 evaluation | Copy `WEEK3_SUBMISSION.md` and the Week 3 evaluation |
-| GitHub | Same public repository | Same public repository |
+| GitHub | [Week 2 repository](https://github.com/bhargavkoduru/eb1-policy-qa-week2) | [Week 3 repository](https://github.com/bhargavkoduru/eb1-research-agent-week3) |
 | Video | Live Policy Q&A walkthrough, at most five minutes | Live research/review/save walkthrough, at most five minutes |
-| Hosted app link | Same URL, Policy Q&A mode | Same URL, Research checklist mode |
+| Hosted app link | Deploy the Week 2 repository | Deploy the Week 3 repository |
 
-The first three rows come from the handouts. A hosted app link is a convenience, not an additional stated requirement. Google Docs and videos remain to be created; the hosted URL remains to be deployed. No examiner password, invitation or API-key sharing is needed.
+The first three rows come from the handouts. A hosted app link is a convenience, not an additional stated requirement. Google Docs and videos remain to be created; the hosted URLs remain to be deployed. No examiner password, invitation or API-key sharing is needed.
 
 ## Finish your submission
 
-1. For password-free examiner access, finish `CLOUD_DEPLOYMENT.md` and add the actual app URL to both submission drafts. Test the link in a private/incognito browser window. Try one cited answer and one checklist yourself. Inspect the evidence and the recorded limitations.
+1. For password-free examiner access, finish `CLOUD_DEPLOYMENT.md` and add each actual app URL to its corresponding submission draft. Test the link in a private/incognito browser window. Try one cited answer and one checklist yourself. Inspect the evidence and the recorded limitations.
 2. Paste each week's submission draft and evaluation report into a Google Doc. Add your name, repository link and video link.
-3. Use https://github.com/bhargavkoduru/eb1-policy-desk for the code link. It is public; no invitation is needed. Credentials, demo scripts, source PDFs, sessions and `.venv` are excluded; future uploads should also use the inspected allowlist.
+3. Use https://github.com/bhargavkoduru/eb1-policy-qa-week2 for Week 2 and https://github.com/bhargavkoduru/eb1-research-agent-week3 for Week 3. Both are public; no invitation is needed. Credentials, demo scripts, source PDFs, sessions and `.venv` are excluded; future uploads should also use the inspected allowlist.
 4. Record a separate live walkthrough of each milestone, no longer than five minutes.
 5. Complete the course submission form with the requested links. This agent has not submitted anything for you.
 
 The Week 2 answer-quality target was met on a small development set under an assistant evidence audit, with one documented failure. Neither the tests nor the citations certify legal accuracy or performance on new questions. An independent human review remains useful.
+
+The standalone suites passed **13 tests for Week 2** and **27 tests for Week 3**. The 28-test count above describes the original combined development app. Dedicated ZIPs are under `dist/` in each standalone local folder.

@@ -1,5 +1,18 @@
 # USCIS EB-1 Policy Assistant
 
+## Separate submission repositories
+
+Submit the dedicated repository for each week:
+
+| Week | Public GitHub repository | Local folder next to this project |
+| --- | --- | --- |
+| Week 2 | [EB-1 Policy Q&A](https://github.com/bhargavkoduru/eb1-policy-qa-week2) | `eb1-policy-qa-week2` |
+| Week 3 | [EB-1 Research Agent](https://github.com/bhargavkoduru/eb1-research-agent-week3) | `eb1-research-agent-week3` |
+
+Each repository contains its own app, setup instructions, Google Doc draft, evaluation and deployment guide. Week 2 opens directly to Q&A; Week 3 opens directly to the reviewed-checklist workflow. Both exclude API keys and demo scripts. Separate local suites passed 13 and 27 tests respectively.
+
+This folder remains the combined development workspace. Its instructions below describe the combined app; use the two links above for course submissions.
+
 Project workspace: `C:\Users\bharg\Desktop\Python\chatbot for EB1`.
 
 This course project answers policy questions about EB-1A and EB-1B with citations, then extends the same retrieval system into a research/checklist workflow with saved state and human review.
