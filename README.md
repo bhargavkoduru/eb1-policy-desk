@@ -2,12 +2,12 @@
 
 This is the original combined development workspace. Use the separate repositories below for the weekly submissions. Both projects run locally with Streamlit.
 
-| Week | Public repository | Editable report |
+| Week | Public repository | Project report |
 | --- | --- | --- |
-| Week 2 | [EB-1 Policy Q&A](https://github.com/bhargavkoduru/eb1-policy-qa-week2) | [Week 2 Word document](docs/WEEK2_PROJECT_REPORT.docx) |
-| Week 3 | [EB-1 Research Agent](https://github.com/bhargavkoduru/eb1-research-agent-week3) | [Week 3 Word document](docs/WEEK3_PROJECT_REPORT.docx) |
+| Week 2 | [EB-1 Policy Q&A](https://github.com/bhargavkoduru/eb1-policy-qa-week2) | [Week 2 report](docs/WEEK2_SUBMISSION.md) |
+| Week 3 | [EB-1 Research Agent](https://github.com/bhargavkoduru/eb1-research-agent-week3) | [Week 3 report](docs/WEEK3_SUBMISSION.md) |
 
-The Word reports include the project overview, framework, dataset, AI coding assistance, evaluation results, limitations and repository links. Open each file in Google Docs and replace `[Your name]`.
+Each public project report covers the scope, dataset, prompts, implementation, measured results and limitations.
 
 ## Run this combined workspace locally
 
@@ -47,4 +47,4 @@ $env:EB1_HOSTED = 'false'
 .\.venv\Scripts\python.exe -m scripts.export_submission
 ```
 
-The allowlisted export includes the two Word reports and scans their uncompressed contents for configured credentials. The independent weekly repositories also provide their own exports.
+Allowlisted exports include public source, corpus, tests and project documentation. Private local reports, screenshots and runtime material are excluded.

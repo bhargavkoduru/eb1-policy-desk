@@ -2,7 +2,7 @@
 
 ## Overview and one-liner
 
-My RAG app helps applicants research EB-1A and EB-1B policy questions from a dated, two-chapter USCIS Policy Manual snapshot in a Streamlit web app, targeting at least 90% supported factual claims and p95 response latency under 15 seconds.
+My RAG app helps applicants answer EB-1A and EB-1B policy questions from USCIS Policy Manual Volume 6, Part F, Chapters 2 and 3 (23 source pages, snapshot September 23, 2026) in a local Streamlit app, targeting at least 90% supported factual claims and p95 response latency below 15 seconds.
 
 This is the permitted custom-use-case route, adapting the Enterprise Policy Q&A pattern. It implements ingestion, cleaning, chunking, embeddings, persistent storage, hybrid retrieval, reranking, cited generation and refusal/clarification. It does not predict personal immigration outcomes.
 
@@ -33,13 +33,6 @@ Main iterations: preserve table headings during cleaning; replace model-generate
 
 See `docs/WEEK2_EVALUATION.md` and `evals/` for actual measurements. This small development set was used to improve the app, so results should not be described as unseen-test performance.
 
-## Examiner access
+## Repository
 
-The app runs locally with Python 3.12 and Streamlit. Clone the public repository and follow the README setup instructions. Live model requests require the reviewer's own Nebius API key in a local `.env`; credentials are not included or shared. The bundled corpus and index let the app start without another parsing or embedding job.
-
-No app login is required. Answers stay in the current browser session.
-
-## Submission links to add
-
-- GitHub repository: https://github.com/bhargavkoduru/eb1-policy-qa-week2 (public; no examiner invitation needed).
-- Google Doc: open `WEEK2_PROJECT_REPORT.docx` in Google Docs and replace `[Your name]`.
+https://github.com/bhargavkoduru/eb1-policy-qa-week2
