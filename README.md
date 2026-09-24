@@ -21,14 +21,14 @@ Status: **both app milestones are implemented, with cloud hosting support**. The
 
 ## Examiner access and submissions
 
-The hosted app opens directly, with no examiner password or API key to enter. One app and one public repository serve both weeks:
+For course submissions, use the two separate repositories above. This combined development app still has both sidebar modes:
 
 | Submission | Select in the app | Documentation | Evaluation |
 | --- | --- | --- | --- |
 | Week 2 | Policy Q&A | [Week 2 draft](docs/WEEK2_SUBMISSION.md) | [RAG results](docs/WEEK2_EVALUATION.md) |
 | Week 3 | Research checklist | [Week 3 draft](docs/WEEK3_SUBMISSION.md) | [Agent results](docs/WEEK3_EVALUATION.md) |
 
-**Hosted URL: pending owner deployment.** Follow [the deployment steps](docs/CLOUD_DEPLOYMENT.md), then add the real URL to both submission drafts. Hosted visitors receive separate temporary browser workspaces; download approved checklists before refreshing or closing the page. Local mode retains research across app restarts.
+**Hosted URLs: pending owner deployment.** Follow [the deployment steps](docs/CLOUD_DEPLOYMENT.md), then add each real URL to its corresponding submission draft. Hosted visitors receive separate temporary browser workspaces; download approved checklists before refreshing or closing the page. Local mode retains research across app restarts.
 
 The handouts require a Google Doc, a live video of at most five minutes, and GitHub assets for each week. A hosted URL is an extra convenience. See the [submission checklist](docs/SUBMISSION_CHECKLIST.md) for what remains.
 
