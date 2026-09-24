@@ -7,4 +7,4 @@ The project uses the handouts' custom-use-case route. Week 2 is a RAG policy Q&A
 | Public repository | [Policy Q&A](https://github.com/bhargavkoduru/eb1-policy-qa-week2) | [Research agent](https://github.com/bhargavkoduru/eb1-research-agent-week3) |
 | Markdown draft | `WEEK2_SUBMISSION.md` | `WEEK3_SUBMISSION.md` |
 | Evaluation | `WEEK2_EVALUATION.md` | `WEEK3_EVALUATION.md` |
-| Standalone tests | 13 passed | 27 passed |
+| Standalone tests | 15 passed | 30 passed |

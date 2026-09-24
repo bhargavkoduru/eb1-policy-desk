@@ -6,6 +6,7 @@ from eb1.bootstrap import ensure_index
 from eb1.usage import UsageLimitError, live_operation
 from eb1.retrieval import Retriever
 from eb1.qa import ask, answer_markdown
+from eb1.models import response_progress
 from eb1.research import ResearchAgent, checklist_markdown
 
 st.set_page_config(page_title='EB-1 Policy Desk', page_icon='📚', layout='wide')
@@ -81,13 +82,17 @@ if mode.startswith('Week 2'):
         question = st.text_area('Your question', placeholder='For EB-1A, is an invitation to review a paper enough to show judging?', max_chars=3000)
         submitted = st.form_submit_button('Find a cited answer', type='primary')
     if submitted:
+        stage = st.empty()
         try:
-            with st.spinner('Searching policy and checking citations…'):
-                with live_operation(viewer):
+            st.session_state.pop('last_answer', None)
+            with st.spinner('Searching policy and checking citations…', show_time=True):
+                with response_progress(stage.caption), live_operation(viewer):
                     result = ask(retriever, question, category)
             st.session_state['last_answer'] = result
         except Exception as exc:
             safe_error(exc)
+        finally:
+            stage.empty()
     if 'last_answer' in st.session_state:
         result = st.session_state['last_answer']
         st.markdown('**' + result['question'] + '**')
@@ -114,7 +119,7 @@ else:
         start = st.form_submit_button('Start research', type='primary')
     if start:
         try:
-            with st.spinner('The agent is choosing its next steps and researching…'):
+            with st.spinner('The agent is choosing its next steps and researching…', show_time=True):
                 with live_operation(viewer):
                     st.session_state['research_id'] = agent.start(goal, category)
             st.rerun()
@@ -140,7 +145,7 @@ else:
                 cancel_research = st.form_submit_button('Cancel research')
             if continue_research or cancel_research:
                 try:
-                    with st.spinner('Continuing research…'):
+                    with st.spinner('Continuing research…', show_time=True):
                         if cancel_research:
                             agent.resume(selected, {'action': 'cancel'})
                         else:

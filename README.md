@@ -48,3 +48,7 @@ $env:EB1_HOSTED = 'false'
 ```
 
 Allowlisted exports include public source, corpus, tests and project documentation. Private local reports, screenshots and runtime material are excluded.
+
+## Response time update
+
+The app now uses `openai/gpt-oss-120b` through Nebius. [Response handling and follow-up checks](docs/PERFORMANCE.md) document the model change, bounded waits and source-preserving fallback. Original evaluation measurements remain labeled with their original model.

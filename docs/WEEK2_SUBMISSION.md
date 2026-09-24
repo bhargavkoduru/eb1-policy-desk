@@ -10,7 +10,7 @@ This is the permitted custom-use-case route, adapting the Enterprise Policy Q&A 
 
 The supplied 105-page public employment-based policy PDF contains the two selected chapters on 23 unique source pages. LlamaParse agentic OCR produced page-aware Markdown after direct PDF extraction proved garbled. The original was preserved. The corpus contains two English chapter documents and 65 retrieval chunks; USCIS is the source of truth. The print/snapshot date is September 23, 2026, not the effective date of every provision.
 
-Chunking is page/section-aware, capped at 550 tokens with 70-token overlap. `Qwen/Qwen3-Embedding-8B` on Nebius produces 4,096-dimensional vectors. Local NumPy storage is sufficient for this small corpus; BM25 provides keyword matching. Reciprocal-rank fusion supplies ten candidates for model reranking, then four passages go into answer generation. Generation and reranking use `Qwen/Qwen3-235B-A22B-Instruct-2507`.
+Chunking is page/section-aware, capped at 550 tokens with 70-token overlap. `Qwen/Qwen3-Embedding-8B` on Nebius produces 4,096-dimensional vectors. Local NumPy storage is sufficient for this small corpus; BM25 provides keyword matching. Reciprocal-rank fusion supplies ten candidates for model reranking, then four passages go into answer generation. Generation and reranking use `openai/gpt-oss-120b`.
 
 The owner checks for source updates monthly and on USCIS notices, targeting refresh within two working days of receiving a new export. Refresh is manual; corpus changes require a rebuilt index. The full six-field framework is in `docs/PROJECT_PLAN.md`.
 
@@ -29,10 +29,14 @@ Selected user prompts given to Codex, reproduced verbatim:
 
 Fifteen original questions cover six direct questions, three cross-chapter questions, three ambiguous requests and three unsupported requests. Gold passages and expected behavior were defined before evaluation. Dense retrieval is compared with hybrid retrieval plus reranking. The evaluation report includes measured retrieval scores, latency, citation checks, claim-support review and a retained failure.
 
-Main iterations: preserve table headings during cleaning; replace model-generated quotations with evidence-ID selection; add explicit category clarification; reduce tangential claims; replace the smaller generation model after source review revealed overbroad statements. Valid source IDs alone do not prove a claim is supported. The final model still produced one overbroad 'mandatory criterion' statement, documented as a failure.
+Main iterations: preserve table headings during cleaning; replace model-generated quotations with evidence-ID selection; add explicit category clarification; reduce tangential claims; replace the smaller generation model after source review revealed overbroad statements. Valid source IDs alone do not prove a claim is supported. The original Qwen baseline still produced one overbroad 'mandatory criterion' statement, documented as a failure.
 
 See `docs/WEEK2_EVALUATION.md` and `evals/` for actual measurements. This small development set was used to improve the app, so results should not be described as unseen-test performance.
 
 ## Repository
 
 https://github.com/bhargavkoduru/eb1-policy-qa-week2
+
+## Response time follow-up
+
+The current model, request timeouts and separate follow-up checks are documented in `docs/PERFORMANCE.md`. Earlier Qwen evaluation results remain preserved and are not presented as measurements of the replacement model.

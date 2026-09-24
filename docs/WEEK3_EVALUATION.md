@@ -1,6 +1,6 @@
 # Week 3 evaluation
 
-Final model: `Qwen/Qwen3-235B-A22B-Instruct-2507` on Nebius. Tests used public policy questions and synthetic workflow state; no candidate records.
+Original evaluation model: `Qwen/Qwen3-235B-A22B-Instruct-2507` on Nebius. Tests used public policy questions and synthetic workflow state; no candidate records.
 
 ## Results
 
@@ -25,3 +25,7 @@ An initial personal-probability request elicited a clarification instead of endi
 Automatic writes to checkpoints and the session catalog preserve unfinished work. User approval gates the final saved checklist. Tasks and user notes are proposed research actions, not verified facts about a candidate. Source citations remain attached to the policy statements when task wording is edited.
 
 All five scenario categories passed in this small test suite. This is not a statistically established production success rate. The final live draft's three policy statements were checked against the attached excerpts by Codex; independent human review is still needed. The manual workflow baseline and actual human review time have not been measured, so no time-savings percentage is claimed.
+
+## Current runtime
+
+The default model and timeout handling have since changed. See [the response-time follow-up](PERFORMANCE.md). The measurements above remain the original Qwen baseline.
